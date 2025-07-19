@@ -3,6 +3,19 @@
 version = 3
 
 [[package]]
+name = "adbc_bigquery"
+version = "0.20.0"
+dependencies = [
+ "adbc_core",
+ "arrow-array",
+ "arrow-schema",
+ "dotenvy",
+ "regex",
+ "test-with",
+ "url",
+]
+
+[[package]]
 name = "adbc_core"
 version = "0.20.0"
 dependencies = [
