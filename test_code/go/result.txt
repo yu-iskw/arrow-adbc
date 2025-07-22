@@ -1,0 +1,96 @@
+=== BigQuery Service Account Impersonation Example Test ===
+
+Loading environment variables from .env file...
+Environment variables:
+  GOOGLE_CLOUD_PROJECT: ub***dbox
+  ADBC_BIGQUERY_DATASET_ID: test***okyo
+  ADBC_BIGQUERY_IMPERSONATE_TARGET: test***.com
+
+Building the example...
+Running the example...
+Note: This will fail if the service account impersonation is not properly configured.
+Make sure the base service account has the 'Service Account Token Creator' role on the target service account.
+
+Running service account impersonation examples...
+Project ID: ub***dbox
+Dataset ID: test***okyo
+Target Principal: test***.com
+
+=== Example 1: Basic Query ===
+Query executed successfully with impersonated credentials!
+Results:
+Schema: schema:
+  fields: 1
+    - test_column: type=int64, nullable
+Num rows: 1
+Row 0: 1
+
+=== Example 2: Bulk Insert ===
+Test table created successfully!
+Successfully inserted 0 rows using impersonated credentials
+
+Querying inserted data:
+Name: Alice, Age: 25, City: New York
+
+=== Example 3: Metadata Queries ===
+Getting table schema and metadata...
+Table Schema: schema:
+  fields: 3
+    - name: type=utf8, nullable
+      metadata: ["Collation": "", "DefaultValueExpression": "", "Description": "", "MaxLength": "0", "Repeated": "false", "Required": "false", "Type": "STRING"]
+    - age: type=int64, nullable
+     metadata: ["DefaultValueExpression": "", "Description": "", "Repeated": "false", "Required": "false", "Type": "INTEGER"]
+    - city: type=utf8, nullable
+      metadata: ["Collation": "", "DefaultValueExpression": "", "Description": "", "MaxLength": "0", "Repeated": "false", "Required": "false", "Type": "STRING"]
+  metadata: ["CreationTime": "2025-07-22T11:49:38.739+09:00", "DefaultCollation": "", "Description": "", "ETag": "+TJK9uioEjx6F2oUEwTm3w==", "FullID": "ub***-yu-sandbox:test_in_tokyo.test_users", "Labels": "", "LastModifiedTime": "2025-07-22T11:49:41.096+09:00", "Location": "asia-northeast1", "Name": "", "NumBytes": "102", "NumLongTermBytes": "0", "NumRows": "4", "Type": "TABLE"]
+
+Table Metadata:
+  CreationTime: 2025-07-22T11:49:38.739+09:00
+  DefaultCollation:
+  Description:
+  ETag: +TJK9uioEjx6F2oUEwTm3w==
+  FullID: ub***-yu-sandbox:test_in_tokyo.test_users
+  Labels:
+  LastModifiedTime: 2025-07-22T11:49:41.096+09:00
+  Location: asia-northeast1
+  Name:
+  NumBytes: 102
+  NumLongTermBytes: 0
+  NumRows: 4
+  Type: TABLE
+
+Getting table types...
+Available table types:
+  - TABLE
+  - VIEW
+  - EXTERNAL
+  - MATERIALIZED_VIEW
+  - SNAPSHOT
+
+Getting objects (tables) in the dataset...
+⚠️  Warning: GetObjects failed: Invalid Argument: Cannot create array schema for filed `predicted_info_types`: len(schema.Schema) != 1
+   Continuing with other metadata queries...
+
+Getting table metadata via SQL query...
+Table metadata from SQL query:
+  Table ID: test_users
+  Creation Time: 1753152578739 (Unix timestamp)
+  Last Modified Time: 1753152581096 (Unix timestamp)
+  Row Count: 4
+  Size Bytes: 102
+  Table Type: 1
+
+Verifying service account impersonation...
+Current user (should be the impersonated service account):
+  Current User: test-bigquery-impersonation@ub***-yu-sandbox.iam.gserviceaccount.com
+  ✅ SUCCESS: Service account impersonation is working correctly!
+  ✅ The table was created by the impersonated service account: test-bigquery-impersonation@ub***-yu-sandbox.iam.gserviceaccount.com
+
+=== Example 4: User Auth + Impersonation ===
+Query executed successfully with user auth + impersonation!
+
+=== Example 5: Error Handling ===
+Connection established successfully!
+Unexpected error: googleapi: Error 404: Not found: Table ub***-yu-sandbox:test_in_tokyo.non_existent_table was not found in location asia-northeast1, notFound
+
+=== Test completed ===
