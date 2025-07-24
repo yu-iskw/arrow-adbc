@@ -1,0 +1,34 @@
+[package]
+name = "adbc_bigquery"
+description = "BigQuery Arrow Database Connectivity (ADBC) driver"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+readme = "README.md"
+documentation = "http://docs.rs/adbc_bigquery/"
+homepage.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[features]
+default = ["bundled", "env", "dotenv"]
+
+bundled = []
+linked = []
+
+env = ["dep:regex"]
+dotenv = ["env", "dep:dotenvy"]
+
+[dependencies]
+adbc_core = { workspace = true, features = ["driver_manager"] }
+arrow-array.workspace = true
+arrow-schema.workspace = true
+dotenvy = { version = "0.15.7", default-features = false, optional = true }
+regex = { version = "1.11.1", default-features = false, optional = true }
+url = "2.5.4"
+
+[dev-dependencies]
+test-with = { version = "0.15.3", default-features = false }
