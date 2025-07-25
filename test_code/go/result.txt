@@ -2,9 +2,9 @@
 
 Loading environment variables from .env file...
 Environment variables:
-  GOOGLE_CLOUD_PROJECT: ub***dbox
-  ADBC_BIGQUERY_DATASET_ID: test***okyo
-  ADBC_BIGQUERY_IMPERSONATE_TARGET: test***.com
+  GOOGLE_CLOUD_PROJECT: ***-***-sandbox
+  ADBC_BIGQUERY_DATASET_ID: test_in_***
+  ADBC_BIGQUERY_IMPERSONATE_TARGET: test-***@***.com
 
 Building the example...
 Running the example...
@@ -12,9 +12,9 @@ Note: This will fail if the service account impersonation is not properly config
 Make sure the base service account has the 'Service Account Token Creator' role on the target service account.
 
 Running service account impersonation examples...
-Project ID: ub***dbox
-Dataset ID: test***okyo
-Target Principal: test***.com
+Project ID: ***-***-sandbox
+Dataset ID: test_in_***
+Target Principal: test-***@***.com
 
 === Example 1: Basic Query ===
 Query executed successfully with impersonated credentials!
@@ -30,7 +30,6 @@ Test table created successfully!
 Successfully inserted 0 rows using impersonated credentials
 
 Querying inserted data:
-Name: Alice, Age: 25, City: New York
 
 === Example 3: Metadata Queries ===
 Getting table schema and metadata...
@@ -42,16 +41,16 @@ Table Schema: schema:
      metadata: ["DefaultValueExpression": "", "Description": "", "Repeated": "false", "Required": "false", "Type": "INTEGER"]
     - city: type=utf8, nullable
       metadata: ["Collation": "", "DefaultValueExpression": "", "Description": "", "MaxLength": "0", "Repeated": "false", "Required": "false", "Type": "STRING"]
-  metadata: ["CreationTime": "2025-07-22T11:49:38.739+09:00", "DefaultCollation": "", "Description": "", "ETag": "+TJK9uioEjx6F2oUEwTm3w==", "FullID": "ub***-yu-sandbox:test_in_tokyo.test_users", "Labels": "", "LastModifiedTime": "2025-07-22T11:49:41.096+09:00", "Location": "asia-northeast1", "Name": "", "NumBytes": "102", "NumLongTermBytes": "0", "NumRows": "4", "Type": "TABLE"]
+  metadata: ["CreationTime": "2025-07-25T16:23:05.656+09:00", "DefaultCollation": "", "Description": "", "ETag": "sFOK1xK/xssmYDJ3wUX3BQ==", "FullID": "***-***-sandbox:test_in_***.test_users", "Labels": "", "LastModifiedTime": "2025-07-25T16:23:07.805+09:00", "Location": "asia-northeast1", "Name": "", "NumBytes": "102", "NumLongTermBytes": "0", "NumRows": "4", "Type": "TABLE"]
 
 Table Metadata:
-  CreationTime: 2025-07-22T11:49:38.739+09:00
+  CreationTime: 2025-07-25T16:23:05.656+09:00
   DefaultCollation:
   Description:
-  ETag: +TJK9uioEjx6F2oUEwTm3w==
-  FullID: ub***-yu-sandbox:test_in_tokyo.test_users
+  ETag: sFOK1xK/xssmYDJ3wUX3BQ==
+  FullID: ***-***-sandbox:test_in_***.test_users
   Labels:
-  LastModifiedTime: 2025-07-22T11:49:41.096+09:00
+  LastModifiedTime: 2025-07-25T16:23:07.805+09:00
   Location: asia-northeast1
   Name:
   NumBytes: 102
@@ -74,23 +73,23 @@ Getting objects (tables) in the dataset...
 Getting table metadata via SQL query...
 Table metadata from SQL query:
   Table ID: test_users
-  Creation Time: 1753152578739 (Unix timestamp)
-  Last Modified Time: 1753152581096 (Unix timestamp)
+  Creation Time: 1753428185656 (Unix timestamp)
+  Last Modified Time: 1753428187805 (Unix timestamp)
   Row Count: 4
   Size Bytes: 102
   Table Type: 1
 
 Verifying service account impersonation...
 Current user (should be the impersonated service account):
-  Current User: test-bigquery-impersonation@ub***-yu-sandbox.iam.gserviceaccount.com
+  Current User: test-bigquery-impersonation@***-***-sandbox.iam.gserviceaccount.com
   ✅ SUCCESS: Service account impersonation is working correctly!
-  ✅ The table was created by the impersonated service account: test-bigquery-impersonation@ub***-yu-sandbox.iam.gserviceaccount.com
+  ✅ The table was created by the impersonated service account: test-bigquery-impersonation@***-***-sandbox.iam.gserviceaccount.com
 
 === Example 4: User Auth + Impersonation ===
 Query executed successfully with user auth + impersonation!
 
 === Example 5: Error Handling ===
 Connection established successfully!
-Unexpected error: googleapi: Error 404: Not found: Table ub***-yu-sandbox:test_in_tokyo.non_existent_table was not found in location asia-northeast1, notFound
+Unexpected error: googleapi: Error 404: Not found: Table ***-***-sandbox:test_in_***.non_existent_table was not found in location asia-northeast1, notFound
 
 === Test completed ===

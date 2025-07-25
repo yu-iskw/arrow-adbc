@@ -30,6 +30,13 @@ import (
 	"github.com/apache/arrow-go/v18/arrow/memory"
 )
 
+// closeResource safely closes a resource and logs any error
+func closeResource(name string, closer interface{ Close() error }) {
+	if err := closer.Close(); err != nil {
+		log.Printf("Warning: failed to close %s: %v", name, err)
+	}
+}
+
 // safeStringValue safely extracts a string value from an Arrow array
 func safeStringValue(arr arrow.Array, index int) string {
 	if arr == nil {
@@ -89,12 +96,12 @@ func getConfig() (map[string]string, error) {
 	}
 
 	return map[string]string{
-		"adbc.bigquery.sql.project_id":                      projectID,
-		"adbc.bigquery.sql.dataset_id":                      datasetID,
-		"adbc.bigquery.sql.auth_type":                       "app_default_credentials",
-		"adbc.google.bigquery.impersonate.target_principal": targetPrincipal,
-		"adbc.google.bigquery.impersonate.scopes":           "https://www.googleapis.com/auth/bigquery,https://www.googleapis.com/auth/cloud-platform",
-		"adbc.google.bigquery.impersonate.lifetime":         "3600s", // 1 hour
+		"adbc.bigquery.sql.project_id":                   projectID,
+		"adbc.bigquery.sql.dataset_id":                   datasetID,
+		"adbc.bigquery.sql.auth_type":                    "adbc.bigquery.sql.auth_type.app_default_credentials",
+		"adbc.bigquery.sql.impersonate.target_principal": targetPrincipal,
+		"adbc.bigquery.sql.impersonate.scopes":           "https://www.googleapis.com/auth/bigquery,https://www.googleapis.com/auth/cloud-platform",
+		"adbc.bigquery.sql.impersonate.lifetime":         "3600s", // 1 hour
 	}, nil
 }
 
@@ -117,21 +124,21 @@ func ExampleServiceAccountImpersonation() {
 	if err != nil {
 		log.Fatalf("Failed to create database: %v", err)
 	}
-	defer db.Close()
+	defer closeResource("database", db)
 
 	// Open connection
 	conn, err := db.Open(ctx)
 	if err != nil {
 		log.Fatalf("Failed to open connection: %v", err)
 	}
-	defer conn.Close()
+	defer closeResource("connection", conn)
 
 	// Execute a simple query
 	stmt, err := conn.NewStatement()
 	if err != nil {
 		log.Fatalf("Failed to create statement: %v", err)
 	}
-	defer stmt.Close()
+	defer closeResource("statement", stmt)
 
 	err = stmt.SetSqlQuery("SELECT 1 as test_column")
 	if err != nil {
@@ -181,21 +188,21 @@ func ExampleBulkInsertWithImpersonation() {
 	if err != nil {
 		log.Fatalf("Failed to create database: %v", err)
 	}
-	defer db.Close()
+	defer closeResource("database", db)
 
 	// Open connection
 	conn, err := db.Open(ctx)
 	if err != nil {
 		log.Fatalf("Failed to open connection: %v", err)
 	}
-	defer conn.Close()
+	defer closeResource("connection", conn)
 
 	// First, create a test table
 	createStmt, err := conn.NewStatement()
 	if err != nil {
 		log.Fatalf("Failed to create statement: %v", err)
 	}
-	defer createStmt.Close()
+	defer closeResource("create statement", createStmt)
 
 	// Create a test table
 	createQuery := fmt.Sprintf(`
@@ -222,7 +229,7 @@ func ExampleBulkInsertWithImpersonation() {
 	if err != nil {
 		log.Fatalf("Failed to create statement: %v", err)
 	}
-	defer stmt.Close()
+	defer closeResource("statement", stmt)
 
 	err = stmt.SetSqlQuery(fmt.Sprintf("INSERT INTO `%s.%s.test_users` (name, age, city) VALUES (?, ?, ?)",
 		config["adbc.bigquery.sql.project_id"], config["adbc.bigquery.sql.dataset_id"]))
@@ -270,7 +277,7 @@ func ExampleBulkInsertWithImpersonation() {
 	if err != nil {
 		log.Fatalf("Failed to create query statement: %v", err)
 	}
-	defer queryStmt.Close()
+	defer closeResource("query statement", queryStmt)
 
 	err = queryStmt.SetSqlQuery(fmt.Sprintf("SELECT name, age, city FROM `%s.%s.test_users` ORDER BY name",
 		config["adbc.bigquery.sql.project_id"], config["adbc.bigquery.sql.dataset_id"]))
@@ -485,7 +492,7 @@ func ExampleMetadataQueries() {
 			fmt.Printf("  Current User: %s\n", currentUser)
 
 			// Verify it matches our target principal
-			expectedUser := config["adbc.google.bigquery.impersonate.target_principal"]
+			expectedUser := config["adbc.bigquery.sql.impersonate.target_principal"]
 			if currentUser == expectedUser {
 				fmt.Printf("  ✅ SUCCESS: Service account impersonation is working correctly!\n")
 				fmt.Printf("  ✅ The table was created by the impersonated service account: %s\n", currentUser)
